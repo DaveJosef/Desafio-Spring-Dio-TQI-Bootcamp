@@ -5,8 +5,10 @@ import one.digitalinnovation.beerstock.exception.BeerAlreadyRegisteredException;
 import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
 import one.digitalinnovation.beerstock.service.BeerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @RestController
@@ -18,7 +20,8 @@ public class BeerController implements BeerControllerDocs {
 
     @Override
     @PostMapping
-    public Beer createBeer(Beer beerDTO) throws BeerAlreadyRegisteredException {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Beer createBeer(@RequestBody @Valid Beer beerDTO) throws BeerAlreadyRegisteredException {
         return beerService.createBeer(beerDTO);
     }
 
