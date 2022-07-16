@@ -1,30 +1,31 @@
 package one.digitalinnovation.beerstock.service;
 
-import one.digitalinnovation.beerstock.dto.BeerDTO;
+import one.digitalinnovation.beerstock.entity.Beer;
+import one.digitalinnovation.beerstock.repository.BeerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 @Service
 public class BeerService {
 
-    public BeerDTO createBeer(BeerDTO beerDTO) {
-        return new BeerDTO();
+    @Autowired
+    private BeerRepository beerRepository;
+
+    public Beer createBeer(Beer beer) {
+        return beerRepository.save(beer);
     }
 
-    public BeerDTO findByName(String name) {
-        return new BeerDTO();
+    public Beer findByName(String name) {
+        return beerRepository.findByName(name).get();
     }
 
-    public List<BeerDTO> listAll() {
-        return new ArrayList<>(){{
-            add(new BeerDTO());
-            add(new BeerDTO());
-            add(new BeerDTO());
-        }};
+    public Collection<Beer> listAll() {
+        return beerRepository.findAll();
     }
 
     public void deleteById(Long id) {
+        beerRepository.deleteById(id);
     }
 }

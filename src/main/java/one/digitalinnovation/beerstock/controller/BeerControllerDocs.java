@@ -1,17 +1,17 @@
 package one.digitalinnovation.beerstock.controller;
 
-import one.digitalinnovation.beerstock.dto.BeerDTO;
+import one.digitalinnovation.beerstock.entity.Beer;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface BeerControllerDocs {
 
-    BeerDTO createBeer(BeerDTO beerDTO);
+    Beer createBeer(Beer beerDTO);
 
-    BeerDTO findByName(@PathVariable String name);
+    Beer findByName(@PathVariable String name);
 
-    List<BeerDTO> listBeers();
+    Collection<Beer> listBeers();
 
     void deleteById(@PathVariable Long id);
 }
