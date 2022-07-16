@@ -1,6 +1,8 @@
 package one.digitalinnovation.beerstock.controller;
 
 import one.digitalinnovation.beerstock.entity.Beer;
+import one.digitalinnovation.beerstock.exception.BeerAlreadyRegisteredException;
+import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
 import one.digitalinnovation.beerstock.service.BeerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +18,13 @@ public class BeerController implements BeerControllerDocs {
 
     @Override
     @PostMapping
-    public Beer createBeer(Beer beerDTO) {
+    public Beer createBeer(Beer beerDTO) throws BeerAlreadyRegisteredException {
         return beerService.createBeer(beerDTO);
     }
 
     @Override
     @GetMapping("/{name}")
-    public Beer findByName(@PathVariable String name) {
+    public Beer findByName(@PathVariable String name) throws BeerNotFoundException {
         return beerService.findByName(name);
     }
 
@@ -34,7 +36,7 @@ public class BeerController implements BeerControllerDocs {
 
     @Override
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable Long id) {
+    public void deleteById(@PathVariable Long id) throws BeerNotFoundException {
         beerService.deleteById(id);
     }
 }
