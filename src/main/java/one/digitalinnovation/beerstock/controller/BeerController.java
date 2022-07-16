@@ -1,5 +1,6 @@
 package one.digitalinnovation.beerstock.controller;
 
+import one.digitalinnovation.beerstock.dto.BeerDTO;
 import one.digitalinnovation.beerstock.entity.Beer;
 import one.digitalinnovation.beerstock.exception.BeerAlreadyRegisteredException;
 import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
@@ -18,10 +19,9 @@ public class BeerController implements BeerControllerDocs {
     @Autowired
     private BeerService beerService;
 
-    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Beer createBeer(@RequestBody @Valid Beer beerDTO) throws BeerAlreadyRegisteredException {
+    public BeerDTO createBeer(@RequestBody @Valid BeerDTO beerDTO) throws BeerAlreadyRegisteredException {
         return beerService.createBeer(beerDTO);
     }
 
@@ -39,6 +39,7 @@ public class BeerController implements BeerControllerDocs {
 
     @Override
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) throws BeerNotFoundException {
         beerService.deleteById(id);
     }

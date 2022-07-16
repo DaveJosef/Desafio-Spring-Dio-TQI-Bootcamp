@@ -1,17 +1,30 @@
 package one.digitalinnovation.beerstock.dto;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class BeerDTO {
 
     private Long id = 1L;
 
+    @NotNull
+    @Size(min = 1, max = 200)
     private String name = "Nome Padrão";
 
+    @NotNull
+    @Size(min = 1, max = 200)
     private String brand = "Marca Padrão";
 
+    @NotNull
+    @Max(500)
     private int max = 100;
 
+    @NotNull
+    @Max(100)
     private int quantity = 50;
 
+    @NotNull
     private String type = "Tipo Padrão";
 
     public Long getId() {

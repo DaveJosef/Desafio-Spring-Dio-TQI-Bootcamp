@@ -1,5 +1,6 @@
 package one.digitalinnovation.beerstock.controller;
 
+import one.digitalinnovation.beerstock.dto.BeerDTO;
 import one.digitalinnovation.beerstock.entity.Beer;
 import one.digitalinnovation.beerstock.exception.BeerAlreadyRegisteredException;
 import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
@@ -9,7 +10,7 @@ import java.util.Collection;
 
 public interface BeerControllerDocs {
 
-    Beer createBeer(Beer beerDTO) throws BeerAlreadyRegisteredException;
+    BeerDTO createBeer(BeerDTO beerDTO) throws BeerAlreadyRegisteredException;
 
     Beer findByName(@PathVariable String name) throws BeerNotFoundException;
 
