@@ -11,26 +11,26 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class BeerDTO {
 
-    private Long id = 1L;
+    private Long id;
 
     @NotNull
     @Size(min = 1, max = 200)
-    private String name = "Nome Padrão";
+    private String name;
 
     @NotNull
     @Size(min = 1, max = 200)
-    private String brand = "Marca Padrão";
+    private String brand;
 
     @NotNull
     @Max(500)
-    private int max = 100;
+    private Integer max;
 
     @NotNull
     @Max(100)
-    private int quantity = 50;
+    private int quantity;
 
     @NotNull
-    private String type = "Tipo Padrão";
+    private String type;
 
     public Long getId() {
         return id;
