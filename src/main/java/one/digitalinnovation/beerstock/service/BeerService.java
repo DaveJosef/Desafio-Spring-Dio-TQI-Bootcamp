@@ -11,8 +11,9 @@ import one.digitalinnovation.beerstock.repository.BeerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -28,12 +29,13 @@ public class BeerService {
         return beerMapper.toDTO(savedBeer);
     }
 
-    public Beer findByName(String name) throws BeerNotFoundException {
-        return beerRepository.findByName(name).orElseThrow(() -> new BeerNotFoundException(name));
+    public BeerDTO findByName(String name) throws BeerNotFoundException {
+        Beer foundBeer = beerRepository.findByName(name).orElseThrow(() -> new BeerNotFoundException(name));
+        return beerMapper.toDTO(foundBeer);
     }
 
-    public Collection<Beer> listAll() {
-        return beerRepository.findAll();
+    public List<BeerDTO> listAll() {
+        return beerRepository.findAll().stream().map(beerMapper::toDTO).collect(Collectors.toList());
     }
 
     public void deleteById(Long id) throws BeerNotFoundException {
