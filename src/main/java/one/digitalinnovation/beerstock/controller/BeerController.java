@@ -1,12 +1,11 @@
 package one.digitalinnovation.beerstock.controller;
 
 import one.digitalinnovation.beerstock.dto.BeerDTO;
+import one.digitalinnovation.beerstock.dto.PurchaseDTO;
 import one.digitalinnovation.beerstock.dto.QuantityDTO;
-import one.digitalinnovation.beerstock.exception.BeerAlreadyRegisteredException;
-import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
-import one.digitalinnovation.beerstock.exception.BeerStockExceededException;
-import one.digitalinnovation.beerstock.exception.NegativeBeerStockException;
+import one.digitalinnovation.beerstock.exception.*;
 import one.digitalinnovation.beerstock.service.BeerService;
+import one.digitalinnovation.beerstock.service.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +19,29 @@ public class BeerController implements BeerControllerDocs {
 
     @Autowired
     private BeerService beerService;
+    @Autowired
+    private PurchaseService purchaseService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BeerDTO createBeer(@RequestBody @Valid BeerDTO beerDTO) throws BeerAlreadyRegisteredException {
         return beerService.createBeer(beerDTO);
+    }
+
+    @PostMapping("/purchase")
+    @ResponseStatus(HttpStatus.CREATED)
+    public PurchaseDTO createPurchase(@RequestBody @Valid PurchaseDTO purchaseDTO) {
+        return purchaseService.createPurchase(purchaseDTO);
+    }
+
+    @GetMapping("/purchase/ofBeer/{beerId}")
+    public List<PurchaseDTO> findPurchaseByBeerId(@PathVariable Long beerId) throws NoPurchasesForBeerException {
+        return purchaseService.findByBeerId(beerId);
+    }
+
+    @GetMapping("/purchase/{id}")
+    public PurchaseDTO findPurchaseById(@PathVariable Long id) throws PurchaseNotFoundException {
+        return purchaseService.findById(id);
     }
 
     @Override

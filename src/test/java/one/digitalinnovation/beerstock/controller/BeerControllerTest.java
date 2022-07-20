@@ -1,12 +1,13 @@
 package one.digitalinnovation.beerstock.controller;
 
 import one.digitalinnovation.beerstock.builder.BeerDTOBuilder;
+import one.digitalinnovation.beerstock.builder.PurchaseDTOBuilder;
 import one.digitalinnovation.beerstock.dto.BeerDTO;
+import one.digitalinnovation.beerstock.dto.PurchaseDTO;
 import one.digitalinnovation.beerstock.dto.QuantityDTO;
-import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
-import one.digitalinnovation.beerstock.exception.BeerStockExceededException;
-import one.digitalinnovation.beerstock.exception.NegativeBeerStockException;
+import one.digitalinnovation.beerstock.exception.*;
 import one.digitalinnovation.beerstock.service.BeerService;
+import one.digitalinnovation.beerstock.service.PurchaseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,11 +37,15 @@ public class BeerControllerTest {
     private static final Long INVALID_BEER_ID = 2L;
     private static final String BEER_API_SUBPATH_INCREMENT_URL = "/increment";
     private static final String BEER_API_SUBPATH_DECREMENT_URL = "/decrement";
+    private static final String BEER_API_SUBPATH_PURCHASE_URL = "/purchase";
+    private static final String BEER_API_SUBPATH_PURCHASE_OF_BEER_URL = "/purchase/ofBeer";
 
     private MockMvc mockMvc;
 
     @Mock
     private BeerService beerService;
+    @Mock
+    private PurchaseService purchaseService;
 
     @InjectMocks
     private BeerController beerController;
@@ -72,6 +77,31 @@ public class BeerControllerTest {
     }
 
     @Test
+    void whenPOSTPurchaseIsCalledThenAPurchaseIsCreated() throws Exception {
+
+        PurchaseDTO purchaseDTO = PurchaseDTOBuilder.builder().build().toPurchaseDTO();
+
+        when(purchaseService.createPurchase(purchaseDTO)).thenReturn(purchaseDTO);
+
+        mockMvc.perform(
+                post(BEER_API_URL_PATH + "/" + BEER_API_SUBPATH_PURCHASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(purchaseDTO)))
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$.quantity", is(purchaseDTO.getQuantity())));
+    }
+
+    @Test
+    void whenPOSTPurchaseIsCalledWithoutRequiredFieldThenAnErrorIsReturned() throws Exception {
+
+        PurchaseDTO purchaseDTO = PurchaseDTOBuilder.builder().build().toPurchaseDTO();
+        purchaseDTO.setBeerId(null);
+
+        mockMvc.perform(post(BEER_API_URL_PATH + "/" + BEER_API_SUBPATH_PURCHASE_URL).contentType(MediaType.APPLICATION_JSON).content(asJsonString(purchaseDTO))).andExpect(status().isBadRequest());
+
+    }
+
+    @Test
     void whenPOSTIsCalledWithoutRequiredFieldThenAnErrorIsReturned() throws Exception {
 
         BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
@@ -79,6 +109,20 @@ public class BeerControllerTest {
 
         mockMvc.perform(post(BEER_API_URL_PATH).contentType(MediaType.APPLICATION_JSON).content(asJsonString(beerDTO))).andExpect(status().isBadRequest());
 
+    }
+
+    @Test
+    void whenGETPurchaseIsCalledWithValidIdThenOkStatusIsReturned() throws Exception {
+
+        PurchaseDTO purchaseDTO = PurchaseDTOBuilder.builder().build().toPurchaseDTO();
+
+        when(purchaseService.findById(purchaseDTO.getId())).thenReturn(purchaseDTO);
+
+        mockMvc.perform(
+                get(BEER_API_URL_PATH + "/" + BEER_API_SUBPATH_PURCHASE_URL + "/" + purchaseDTO.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.quantity", is(purchaseDTO.getQuantity())));
     }
 
     @Test
@@ -93,6 +137,28 @@ public class BeerControllerTest {
         .andExpect(jsonPath("$.name", is(beerDTO.getName())))
                 .andExpect(jsonPath("$.brand", is(beerDTO.getBrand())))
                 .andExpect(jsonPath("$.type", is(beerDTO.getType())));
+    }
+
+    @Test
+    void whenGETPurchaseIsCalledWithoutRegisteredIdThenNotFoundStatusIsReturned() throws Exception {
+
+        PurchaseDTO purchaseDTO = PurchaseDTOBuilder.builder().build().toPurchaseDTO();
+
+        when(purchaseService.findById(purchaseDTO.getId())).thenThrow(PurchaseNotFoundException.class);
+
+        mockMvc.perform(get(BEER_API_URL_PATH + "/" + BEER_API_SUBPATH_PURCHASE_URL + "/" + purchaseDTO.getId()).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void whenGETPurchaseIsCalledWithoutRegisteredBeerIdThenNotFoundStatusIsReturned() throws Exception {
+
+        PurchaseDTO purchaseDTO = PurchaseDTOBuilder.builder().build().toPurchaseDTO();
+
+        when(purchaseService.findByBeerId(purchaseDTO.getBeerId())).thenThrow(NoPurchasesForBeerException.class);
+
+        mockMvc.perform(get(BEER_API_URL_PATH + "/" + BEER_API_SUBPATH_PURCHASE_OF_BEER_URL + "/" + purchaseDTO.getBeerId()).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+
     }
 
     @Test
