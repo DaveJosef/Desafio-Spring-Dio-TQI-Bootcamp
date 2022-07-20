@@ -1,0 +1,13 @@
+(V)rotas;
+(V)rotas respondem cervejas padrões;
+(V)banco de dados;
+(V)exceções;
+(V)lombok;
+(V)beer mapping;
+(V)quantidade;
+(V)swagger;
+(V)testes de controller;
+(V)decrement;
+(V)entidade compras {id, id_cliente, id_cerveja, quantidade};
+(V)testes de service;
+(V)enum;
