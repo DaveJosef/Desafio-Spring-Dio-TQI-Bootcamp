@@ -73,7 +73,7 @@ public class BeerControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is(beerDTO.getName())))
                 .andExpect(jsonPath("$.brand", is(beerDTO.getBrand())))
-                .andExpect(jsonPath("$.type", is(beerDTO.getType())));
+                .andExpect(jsonPath("$.type", is(beerDTO.getType().toString())));
     }
 
     @Test
@@ -136,7 +136,7 @@ public class BeerControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.name", is(beerDTO.getName())))
                 .andExpect(jsonPath("$.brand", is(beerDTO.getBrand())))
-                .andExpect(jsonPath("$.type", is(beerDTO.getType())));
+                .andExpect(jsonPath("$.type", is(beerDTO.getType().toString())));
     }
 
     @Test
@@ -183,7 +183,7 @@ public class BeerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name", is(beerDTO.getName())))
                 .andExpect(jsonPath("$[0].brand", is(beerDTO.getBrand())))
-                .andExpect(jsonPath("$[0].type", is(beerDTO.getType())));
+                .andExpect(jsonPath("$[0].type", is(beerDTO.getType().toString())));
     }
 
     @Test
@@ -233,7 +233,7 @@ public class BeerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(beerDTO.getName())))
                 .andExpect(jsonPath("$.brand", is(beerDTO.getBrand())))
-                .andExpect(jsonPath("$.type", is(beerDTO.getType())))
+                .andExpect(jsonPath("$.type", is(beerDTO.getType().toString())))
                 .andExpect(jsonPath("$.quantity", is(beerDTO.getQuantity())));
 
     }
@@ -264,7 +264,7 @@ public class BeerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(beerDTO.getName())))
                 .andExpect(jsonPath("$.brand", is(beerDTO.getBrand())))
-                .andExpect(jsonPath("$.type", is(beerDTO.getType())))
+                .andExpect(jsonPath("$.type", is(beerDTO.getType().toString())))
                 .andExpect(jsonPath("$.quantity", is(beerDTO.getQuantity())));
 
     }

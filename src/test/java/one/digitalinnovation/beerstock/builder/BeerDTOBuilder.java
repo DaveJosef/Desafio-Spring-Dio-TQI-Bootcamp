@@ -2,6 +2,7 @@ package one.digitalinnovation.beerstock.builder;
 
 import lombok.Builder;
 import one.digitalinnovation.beerstock.dto.BeerDTO;
+import one.digitalinnovation.beerstock.enums.BeerType;
 
 @Builder
 public class BeerDTOBuilder {
@@ -22,7 +23,7 @@ public class BeerDTOBuilder {
     private int quantity = 10;
 
     @Builder.Default
-    private String type = "Lager";
+    private BeerType type = BeerType.LAGER;
 
     public BeerDTO toBeerDTO() {
         return new BeerDTO(

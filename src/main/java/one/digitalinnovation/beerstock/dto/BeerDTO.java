@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import one.digitalinnovation.beerstock.enums.BeerType;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -33,7 +36,8 @@ public class BeerDTO {
     @Max(100)
     private int quantity;
 
+    @Enumerated(EnumType.STRING)
     @NotNull
-    private String type;
+    private BeerType type;
 
 }
